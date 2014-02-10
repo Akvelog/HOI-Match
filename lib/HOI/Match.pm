@@ -56,11 +56,11 @@ sub astmatch_impl {
         "list" => 
         sub { 
             my ($l, $val) = @_; 
-            if ($#{$l} and ($#{$val} >= 0)) {
+            if (($#{$l} >= 0) and ($#{$val} >= 0)) {
                 my ($s1, $r1) = astmatch_impl([ $l->[0] ], [ $val->[0] ], $env_current);
                 my ($s2, $r2) = astmatch_impl([ $l->[1] ], [ [ @$val[1..$#{$val}] ] ], $env_current);
                 return ($s1 * $s2, { %$r1, %$r2 });
-            } elsif (($#{$l} == 0) and ($#{$val} < 0)) {
+            } elsif (($#{$l} < 0) and ($#{$val} < 0)) {
                 return (1, {});
             } else {
                 return (0, {});
