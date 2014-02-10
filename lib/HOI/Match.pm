@@ -10,7 +10,7 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my @tokens = (
     qw (
@@ -147,30 +147,38 @@ are supported.
 A wildcard symbol ([A-Za-z_][A-Za-z0-9_]*) matches exactly one argument.
 A list is represented as an array reference. 
 An algebraic-data-typed object is represented as an hashref with two keys,
-namely "type", which gives its typename, and "val", which is an array refer-
-ence containing zero or more wildcard symbols, lists, or algebraic-data-
-typed objects.
+namely "type", which gives its typename, and "val", which is an array reference 
+containing zero or more wildcard symbols, lists, or algebraic-data-typed objects.
 
 The BNF used to define the pattern grammar is given below:
 
+
 Types: Type 
      | Type COMMA Types 
+
 
 Type: IDENT 
     | Type CONCAT Type 
     | NIL 
     | IDENT LPAREN Typelist RPAREN 
 
+
 Typelist: <eps>
         | Type Typelist 
+
 
 where
 
 IDENT = [A-Za-z_][A-Za-z0-9_]*
+
 CONCAT = ::
+
 NIL = nil
+
 LPAREN = (
+
 RPAREN = )
+
 COMMA = ,
 
 are tokens.
@@ -193,8 +201,7 @@ instead of
     "point (_ x), y".
 
 On a successful match, the values corresponding to identifiers in the pattern
-will be passed to the subroutine in a hash. You can access them as named argu-
-ments with
+will be passed to the subroutine in a hash. You can access them as named arguments with
 
     my %args = @_;
 
@@ -203,7 +210,7 @@ be passed to the subroutine.
 
 =head1 AUTHOR
 
-withering <lt>withering@cpan.org<gt>
+withering <withering@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
