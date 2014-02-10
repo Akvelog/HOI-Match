@@ -198,6 +198,9 @@ ments with
 
     my %args = @_;
 
+Identifiers that begin with an underscore ('_') will be ignored. They will not
+be passed to the subroutine.
+
 =head1 AUTHOR
 
 withering <lt>withering@cpan.org<gt>
