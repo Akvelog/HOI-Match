@@ -10,7 +10,7 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 my @tokens = (
     qw (
@@ -120,7 +120,6 @@ HOI::Match - Higher-Order Imperative "Re"features in Perl
 =head1 SYNOPSIS
 
   use HOI::Match;
-  blah blah blah
 
   sub point_extract {
       HOI::Match::pmatch(

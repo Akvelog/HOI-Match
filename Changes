@@ -5,3 +5,5 @@ Revision history for Perl extension HOI::Match.
 		-XAn HOI::Match
 0.02  Mon Feb 10 2014
     - Fixed readme format.
+0.03  Mon Feb 10 2014
+    - Fixed readme format.
