@@ -1,0 +1,6 @@
+Revision history for Perl extension HOI::Match.
+
+0.01  Mon Feb 10 10:07:33 2014
+	- original version; created by h2xs 1.23 with options
+		-XAn HOI::Match
+
