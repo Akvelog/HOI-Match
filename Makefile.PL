@@ -10,6 +10,7 @@ WriteMakefile(
         'lib/HOI/Match.pm' => '$(INST_LIBDIR)/Match.pm',
         'lib/HOI/typeparser.pm' => '$(INST_LIBDIR)/typeparser.pm'
     },
+    LICENSE          => 'perl',
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/HOI/Match.pm', # retrieve abstract from module
        AUTHOR         => 'withering <withering@cpan.org>') : ())

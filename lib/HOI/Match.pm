@@ -10,7 +10,7 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my @tokens = (
     qw (
@@ -43,10 +43,9 @@ sub pcompile {
     $parser->YYParse(yylex => \&lexana)
 }
 
-sub astmatch_impl {
-    my ($ast, $args, $env) = @_;
+sub astmatch {
+    my ($ast, $args) = @_;
     return (0, {}) if ($#{$ast} ne $#{$args});
-    my $env_current = { %$env };
     my %switches = (
         "any" => 
         sub { 
@@ -57,8 +56,8 @@ sub astmatch_impl {
         sub { 
             my ($l, $val) = @_; 
             if (($#{$l} >= 0) and ($#{$val} >= 0)) {
-                my ($s1, $r1) = astmatch_impl([ $l->[0] ], [ $val->[0] ], $env_current);
-                my ($s2, $r2) = astmatch_impl([ $l->[1] ], [ [ @$val[1..$#{$val}] ] ], $env_current);
+                my ($s1, $r1) = astmatch([ $l->[0] ], [ $val->[0] ]);
+                my ($s2, $r2) = astmatch([ $l->[1] ], [ [ @$val[1..$#{$val}] ] ]);
                 return ($s1 * $s2, { %$r1, %$r2 });
             } elsif (($#{$l} < 0) and ($#{$val} < 0)) {
                 return (1, {});
@@ -72,7 +71,7 @@ sub astmatch_impl {
             return (0, {}) if ((not defined $val->{"type"}) or (not defined $val->{"val"}));
             my ($sym, $typelist) = ($adt->[0], $adt->[1]);
             return (0, {}) if ($adt->[0] ne $val->{"type"});
-            astmatch_impl($adt->[1], $val->{"val"}, $env_current)
+            astmatch($adt->[1], $val->{"val"})
         }
     );
     my $ret = {};
@@ -85,10 +84,6 @@ sub astmatch_impl {
         }
     }
     (1, $ret)
-}
-
-sub astmatch {
-    astmatch_impl(@_, {})
 }
 
 sub pmatch {
