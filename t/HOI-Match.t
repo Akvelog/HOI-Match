@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 BEGIN { use_ok('HOI::Match') };
 
 #########################
@@ -58,3 +58,11 @@ sub fact {
     )->(@_)
 }
 ok(fact(5) == 120);
+
+sub alphabet {
+    HOI::Match::pmatch(
+        '"a"' => sub { 'a' },
+        'x' => sub { my %args = @_; alphabet(chr(ord($args{x})-1)).$args{x} }
+    )->(@_)
+}
+ok(alphabet('z') eq 'abcdefghijklmnopqrstuvwxyz');
