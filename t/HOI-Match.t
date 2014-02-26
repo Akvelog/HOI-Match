@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 BEGIN { use_ok('HOI::Match') };
 
 #########################
@@ -50,3 +50,11 @@ ok(
         ]
     ) == 6
 );
+
+sub fact {
+    HOI::Match::pmatch(
+        "0" => sub { 1 },
+        "x" => sub { my %args = @_; $args{x} * fact($args{x} - 1) }
+    )->(@_)
+}
+ok(fact(5) == 120);

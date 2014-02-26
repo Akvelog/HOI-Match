@@ -10,7 +10,7 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my @tokens = (
     qw (
@@ -19,6 +19,7 @@ my @tokens = (
         CONCAT      ::
         NIL         nil
         IDENT       [A-Za-z_][A-Za-z0-9_]*
+        CONST       (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".+\")|(?:\'.+\')
     ),
     COMMA => q/,/
 );
@@ -47,6 +48,16 @@ sub astmatch {
     my ($ast, $args) = @_;
     return (0, {}) if ($#{$ast} ne $#{$args});
     my %switches = (
+        "const" =>
+        sub {
+            my ($sym, $val) = @_;
+            if( (substr($sym, 0, 1) eq '\'') or (substr($sym, 0, 1) eq '"') ) {
+                my $quote = substr($sym, 0, 1);
+                return ($sym eq $quote.$val.$quote) ? (1, {}) : (0, {});
+            } else {
+                return ($sym == $val) ? (1, {}) : (0, {});
+            }
+        },
         "any" => 
         sub { 
             my ($sym, $val) = @_; 
@@ -151,7 +162,8 @@ Types: Type
      | Type COMMA Types 
 
 
-Type: IDENT 
+Type: CONST
+    | IDENT 
     | Type CONCAT Type 
     | NIL 
     | IDENT LPAREN Typelist RPAREN 
@@ -162,6 +174,8 @@ Typelist: <eps>
 
 
 where
+
+CONST = (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".+\")|(?:\'.+\')
 
 IDENT = [A-Za-z_][A-Za-z0-9_]*
 

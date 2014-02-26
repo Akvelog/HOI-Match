@@ -9,3 +9,5 @@ Revision history for Perl extension HOI::Match.
     - Fixed readme format.
 0.04  Wed Feb 12 2014
     - Removed unused parameters and functions. Add README and license metadata.
+0.05  Wed Feb 26 2014
+    - Added constant (decimal integers & floats, strings) matching.
