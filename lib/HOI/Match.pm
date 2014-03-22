@@ -10,7 +10,7 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my @tokens = (
     qw (
@@ -82,6 +82,7 @@ sub astmatch {
             return (0, {}) if ((not defined $val->{"type"}) or (not defined $val->{"val"}));
             my ($sym, $typelist) = ($adt->[0], $adt->[1]);
             return (0, {}) if ($adt->[0] ne $val->{"type"});
+            return (0, {}) if ($#{$adt->[1]} != $#{$val->{"val"}});
             astmatch($adt->[1], $val->{"val"})
         }
     );
@@ -154,6 +155,7 @@ A list is represented as an array reference.
 An algebraic-data-typed object is represented as an hashref with two keys,
 namely "type", which gives its typename, and "val", which is an array reference 
 containing zero or more wildcard symbols, lists, or algebraic-data-typed objects.
+Multiple constructors for a given algebraic data type named A are allowed.
 
 The BNF used to define the pattern grammar is given below:
 

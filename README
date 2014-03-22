@@ -33,6 +33,7 @@ A list is represented as an array reference.
 An algebraic-data-typed object is represented as an hashref with two keys,
 namely "type", which gives its typename, and "val", which is an array reference 
 containing zero or more wildcard symbols, lists, or algebraic-data-typed objects.
+Multiple constructors for a given algebraic data type named A are allowed.
 
 The BNF used to define the pattern grammar is given below:
 
@@ -41,7 +42,8 @@ Types: Type
      | Type COMMA Types 
 
 
-Type: IDENT 
+Type: CONST
+    | IDENT 
     | Type CONCAT Type 
     | NIL 
     | IDENT LPAREN Typelist RPAREN 
@@ -52,6 +54,8 @@ Typelist: <eps>
 
 
 where
+
+CONST = (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".+\")|(?:\'.+\')
 
 IDENT = [A-Za-z_][A-Za-z0-9_]*
 
