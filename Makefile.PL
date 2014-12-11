@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'HOI::Match',
     VERSION_FROM      => 'lib/HOI/Match.pm', # finds $VERSION
-    PREREQ_PM         => { Parse::Yapp::Driver => 1.05, Parse::Lex => 2.21 }, # e.g., Module::Name => 1.1
+    PREREQ_PM         => { Parse::Yapp::Driver => 1.05, Parse::Lex => 2.21, Alias => 2.32 }, # e.g., Module::Name => 1.1
     PM                => {
         'lib/HOI/Match.pm' => '$(INST_LIBDIR)/Match.pm',
         'lib/HOI/typeparser.pm' => '$(INST_LIBDIR)/typeparser.pm'

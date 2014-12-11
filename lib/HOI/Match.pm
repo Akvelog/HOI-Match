@@ -1,7 +1,6 @@
 package HOI::Match;
 
-use strict;
-use warnings;
+use Alias qw(attr);
 
 require Exporter;
 
@@ -10,7 +9,7 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 my @tokens = (
     qw (
@@ -110,6 +109,9 @@ sub pmatch {
             my $pattern_ast = $compiled_patterns{$pattern_sig};
             my ($status, $results) = astmatch($pattern_ast, $args);
             if ($status) {
+                my ($package) = caller(1);
+                local $Alias::AttrPrefix = $package.'::';
+                attr $results;
                 return $handler->(%$results);
             }
         }
@@ -217,6 +219,9 @@ will be passed to the subroutine in a hash. You can access them as named argumen
 
 Identifiers that begin with an underscore ('_') will be ignored. They will not
 be passed to the subroutine.
+
+Version 0.07 offers aliases for identifiers in the pattern under the support of Alias.
+See the test files for details.
 
 =head1 AUTHOR
 

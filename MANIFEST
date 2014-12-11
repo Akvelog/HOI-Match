@@ -3,5 +3,6 @@ Makefile.PL
 MANIFEST
 README
 t/HOI-Match.t
+t/Match-Alias.t
 lib/HOI/Match.pm
 lib/HOI/typeparser.pm

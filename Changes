@@ -13,3 +13,5 @@ Revision history for Perl extension HOI::Match.
     - Added constant (decimal integers & floats, strings) matching.
 0.06  Sat Mar 22 2014
     - Added multiple type constructor for ADTs.
+0.07  Thu Dec 11 2014
+    -Added alias support.

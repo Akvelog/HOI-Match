@@ -96,6 +96,9 @@ will be passed to the subroutine in a hash. You can access them as named argumen
 Identifiers that begin with an underscore ('_') will be ignored. They will not
 be passed to the subroutine.
 
+Version 0.07 offers aliases for identifiers in the pattern under the support of Alias.
+See the test files for details.
+
 AUTHOR
 
 withering <withering@cpan.org>
