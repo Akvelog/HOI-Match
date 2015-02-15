@@ -10,7 +10,7 @@ BEGIN { use_ok('HOI::Match') };
 
 sub sum {
     HOI::Match::pmatch(
-        "h :: r" => sub { $h + sum(\@r) },
+        "h :: r" => sub { $h + sum($r) },
         "nil" => sub { 0 }
     )->(@_)
 }
@@ -26,7 +26,7 @@ ok(head([1, 2, 3]) == 1);
 
 sub tail {
     HOI::Match::pmatch(
-        "_ :: r" => sub { \@r }
+        "_ :: r" => sub { $r }
     )->(@_)
 }
 my $res_tail = tail([1, 2, 3]);
@@ -34,7 +34,7 @@ is_deeply($res_tail, [2, 3]);
 
 sub point_extract {
     HOI::Match::pmatch(
-        "point (x _) :: r" => sub { $x + point_extract(\@r) },
+        "point (x _) :: r" => sub { $x + point_extract($r) },
         "nil" => sub { 0 }
     )->(@_)
 }
