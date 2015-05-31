@@ -47,6 +47,7 @@ Type: CONST
     | Type CONCAT Type 
     | NIL 
     | IDENT LPAREN Typelist RPAREN 
+    | IDENT STRCONCAT IDENT
 
 
 Typelist: <eps>
@@ -55,11 +56,13 @@ Typelist: <eps>
 
 where
 
-CONST = (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".+\")|(?:\'.+\')
+CONST = (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".*\")|(?:\'.*\')
 
 IDENT = [A-Za-z_][A-Za-z0-9_]*
 
 CONCAT = ::
+
+STRCONCAT = :
 
 NIL = nil
 
