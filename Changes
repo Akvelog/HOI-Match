@@ -17,3 +17,6 @@ Revision history for Perl extension HOI::Match.
     - Added alias support.
 0.071 Sun Feb 15 2015
     - Removed inline code.
+0.072 Sun May 31 2015
+    - Bugfix: Empty string matching.
+    - Feature: String as a pseudo-list

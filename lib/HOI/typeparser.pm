@@ -26,13 +26,13 @@ sub new {
 [
 	{#State 0
 		ACTIONS => {
-			'NIL' => 3,
-			'CONST' => 5,
-			'IDENT' => 2
+			'CONST' => 4,
+			'NIL' => 5,
+			'IDENT' => 3
 		},
 		GOTOS => {
-			'Types' => 1,
-			'Type' => 4
+			'Type' => 2,
+			'Types' => 1
 		}
 	},
 	{#State 1
@@ -42,43 +42,43 @@ sub new {
 	},
 	{#State 2
 		ACTIONS => {
-			'LPAREN' => 7
-		},
-		DEFAULT => -4
-	},
-	{#State 3
-		DEFAULT => -6
-	},
-	{#State 4
-		ACTIONS => {
-			'CONCAT' => 8,
-			'COMMA' => 9
+			'COMMA' => 7,
+			'CONCAT' => 8
 		},
 		DEFAULT => -1
 	},
-	{#State 5
+	{#State 3
+		ACTIONS => {
+			'STRCONCAT' => 10,
+			'LPAREN' => 9
+		},
+		DEFAULT => -4
+	},
+	{#State 4
 		DEFAULT => -3
+	},
+	{#State 5
+		DEFAULT => -6
 	},
 	{#State 6
 		DEFAULT => 0
 	},
 	{#State 7
 		ACTIONS => {
-			'IDENT' => 2,
-			'NIL' => 3,
-			'CONST' => 5
+			'IDENT' => 3,
+			'CONST' => 4,
+			'NIL' => 5
 		},
-		DEFAULT => -8,
 		GOTOS => {
-			'Typelist' => 10,
-			'Type' => 11
+			'Types' => 11,
+			'Type' => 2
 		}
 	},
 	{#State 8
 		ACTIONS => {
-			'NIL' => 3,
-			'CONST' => 5,
-			'IDENT' => 2
+			'IDENT' => 3,
+			'CONST' => 4,
+			'NIL' => 5
 		},
 		GOTOS => {
 			'Type' => 12
@@ -86,32 +86,23 @@ sub new {
 	},
 	{#State 9
 		ACTIONS => {
-			'IDENT' => 2,
-			'NIL' => 3,
-			'CONST' => 5
+			'IDENT' => 3,
+			'CONST' => 4,
+			'NIL' => 5
 		},
+		DEFAULT => -9,
 		GOTOS => {
-			'Type' => 4,
-			'Types' => 13
+			'Type' => 14,
+			'Typelist' => 13
 		}
 	},
 	{#State 10
 		ACTIONS => {
-			'RPAREN' => 14
+			'IDENT' => 15
 		}
 	},
 	{#State 11
-		ACTIONS => {
-			'NIL' => 3,
-			'CONST' => 5,
-			'IDENT' => 2,
-			'CONCAT' => 8
-		},
-		DEFAULT => -8,
-		GOTOS => {
-			'Type' => 11,
-			'Typelist' => 15
-		}
+		DEFAULT => -2
 	},
 	{#State 12
 		ACTIONS => {
@@ -120,13 +111,31 @@ sub new {
 		DEFAULT => -5
 	},
 	{#State 13
-		DEFAULT => -2
+		ACTIONS => {
+			'RPAREN' => 16
+		}
 	},
 	{#State 14
-		DEFAULT => -7
+		ACTIONS => {
+			'CONST' => 4,
+			'NIL' => 5,
+			'CONCAT' => 8,
+			'IDENT' => 3
+		},
+		DEFAULT => -9,
+		GOTOS => {
+			'Type' => 14,
+			'Typelist' => 17
+		}
 	},
 	{#State 15
-		DEFAULT => -9
+		DEFAULT => -8
+	},
+	{#State 16
+		DEFAULT => -7
+	},
+	{#State 17
+		DEFAULT => -10
 	}
 ],
                                   yyrules  =>
@@ -137,55 +146,61 @@ sub new {
 	[#Rule 1
 		 'Types', 1,
 sub
-#line 11 "typeparser.yp"
+#line 12 "typeparser.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 2
 		 'Types', 3,
 sub
-#line 12 "typeparser.yp"
+#line 13 "typeparser.yp"
 { my $sublist = $_[3]; my @list= ($_[1], @$sublist); \@list }
 	],
 	[#Rule 3
 		 'Type', 1,
 sub
-#line 15 "typeparser.yp"
+#line 16 "typeparser.yp"
 { { "kind" => "const", "val" => $_[1] } }
 	],
 	[#Rule 4
 		 'Type', 1,
 sub
-#line 16 "typeparser.yp"
+#line 17 "typeparser.yp"
 { { "kind" => "any", "val" => $_[1] } }
 	],
 	[#Rule 5
 		 'Type', 3,
 sub
-#line 17 "typeparser.yp"
+#line 18 "typeparser.yp"
 { { "kind" => "list", "val" => [ $_[1], $_[3] ] } }
 	],
 	[#Rule 6
 		 'Type', 1,
 sub
-#line 18 "typeparser.yp"
+#line 19 "typeparser.yp"
 { { "kind" => "list", "val" => [] } }
 	],
 	[#Rule 7
 		 'Type', 4,
 sub
-#line 19 "typeparser.yp"
+#line 20 "typeparser.yp"
 { { "kind" => "adt", "val" => [ $_[1], $_[3] ] } }
 	],
 	[#Rule 8
-		 'Typelist', 0,
+		 'Type', 3,
 sub
-#line 22 "typeparser.yp"
-{ [] }
+#line 21 "typeparser.yp"
+{ { "kind" => "strspl", "val" => [ $_[1], $_[3] ] } }
 	],
 	[#Rule 9
+		 'Typelist', 0,
+sub
+#line 24 "typeparser.yp"
+{ [] }
+	],
+	[#Rule 10
 		 'Typelist', 2,
 sub
-#line 23 "typeparser.yp"
+#line 25 "typeparser.yp"
 { my $sublist = $_[2]; my @list= ($_[1], @$sublist); \@list }
 	]
 ],
@@ -193,7 +208,7 @@ sub
     bless($self,$class);
 }
 
-#line 26 "typeparser.yp"
+#line 28 "typeparser.yp"
 
 
 1;

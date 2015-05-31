@@ -7,16 +7,17 @@ use HOI::typeparser;
 
 our @ISA = qw( Exporter );
 our @EXPORT_OK = qw( pmatch );
-our $VERSION = '0.071';
+our $VERSION = '0.072';
 
 my @tokens = (
     qw (
         LPAREN      [\(]
         RPAREN      [\)]
         CONCAT      ::
+        STRCONCAT   [:]
         NIL         nil
         IDENT       [A-Za-z_][A-Za-z0-9_]*
-        CONST       (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".+\")|(?:\'.+\')
+        CONST       (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".*\")|(?:\'.*\')
     ),
     COMMA => q/,/
 );
@@ -81,6 +82,16 @@ sub astmatch {
             return (0, {}) if ($adt->[0] ne $val->{"type"});
             return (0, {}) if ($#{$adt->[1]} != $#{$val->{"val"}});
             astmatch($adt->[1], $val->{"val"})
+        },
+        "strspl" =>
+        sub {
+            my ($idents, $val) = @_;
+            my ($x, $xs);
+            if ( ($x, $xs) = ($val =~ /(.)(.*)/s) ) {
+                return (1, { $idents->[0] => $x, $idents->[1] => $xs });
+            } else {
+                return (0, {});
+            }
         }
     );
     my $ret = {};
@@ -173,6 +184,7 @@ Type: CONST
     | Type CONCAT Type 
     | NIL 
     | IDENT LPAREN Typelist RPAREN 
+    | IDENT STRCONCAT IDENT
 
 
 Typelist: <eps>
@@ -181,11 +193,13 @@ Typelist: <eps>
 
 where
 
-CONST = (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".+\")|(?:\'.+\')
+CONST = (?:0(?:\.[0-9]+)?)|(?:[1-9][0-9]*(?:\.[0-9]+)?)|(?:\".*\")|(?:\'.*\')
 
 IDENT = [A-Za-z_][A-Za-z0-9_]*
 
 CONCAT = ::
+
+STRCONCAT = :
 
 NIL = nil
 

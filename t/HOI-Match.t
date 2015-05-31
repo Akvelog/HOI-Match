@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 BEGIN { use_ok('HOI::Match') };
 
 #########################
@@ -75,3 +75,12 @@ sub ovld {
 }
 ok(ovld( { 'type' => 'point', 'val' => [ 1, 2 ] } ) == 3);
 ok(ovld( { 'type' => 'point', 'val' => [ 1, 2, 3 ] } ) == 6);
+
+sub strrev {
+    HOI::Match::pmatch(
+        '""' => sub { "" },
+        'x:xs' => sub { my %args = @_; strrev($args{xs}).$args{x} }
+    )->(@_)
+}
+
+ok(strrev('abcde') eq 'edcba');

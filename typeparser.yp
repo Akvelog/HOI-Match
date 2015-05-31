@@ -1,0 +1,28 @@
+%token CONST
+%token IDENT
+%token LPAREN
+%token RPAREN
+%token CONCAT
+%token COMMA
+%token NIL
+%token STRCONCAT
+
+%%
+
+Types: Type { [ $_[1] ] }
+     | Type COMMA Types { my $sublist = $_[3]; my @list= ($_[1], @$sublist); \@list }
+;
+
+Type: CONST { { "kind" => "const", "val" => $_[1] } }
+    | IDENT { { "kind" => "any", "val" => $_[1] } }
+    | Type CONCAT Type { { "kind" => "list", "val" => [ $_[1], $_[3] ] } }
+    | NIL { { "kind" => "list", "val" => [] } }
+    | IDENT LPAREN Typelist RPAREN { { "kind" => "adt", "val" => [ $_[1], $_[3] ] } }
+    | IDENT STRCONCAT IDENT { { "kind" => "strspl", "val" => [ $_[1], $_[3] ] } }
+;
+
+Typelist: { [] }
+        | Type Typelist { my $sublist = $_[2]; my @list= ($_[1], @$sublist); \@list }
+;
+
+%%
